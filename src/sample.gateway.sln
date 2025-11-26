@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11205.157 d18.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sample.gateway", "sample.gateway\sample.gateway.csproj", "{3DFF2212-CA94-1809-BA0B-D8ABFF2834F8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{8690C904-C85B-411A-988F-8CFBF3818204}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+		..\global.json = ..\global.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3DFF2212-CA94-1809-BA0B-D8ABFF2834F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DFF2212-CA94-1809-BA0B-D8ABFF2834F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DFF2212-CA94-1809-BA0B-D8ABFF2834F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DFF2212-CA94-1809-BA0B-D8ABFF2834F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B5C00E8-BF5E-4BF1-8495-3C548AB16611}
+	EndGlobalSection
+EndGlobal

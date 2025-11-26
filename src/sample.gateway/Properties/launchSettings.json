@@ -1,0 +1,159 @@
+{
+  "profiles": {
+    "ToolsDevelopment": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "dev",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendRoleAssignment": {
+      "commandName": "Project",
+      "commandLineArgs": "SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendRoleAssignmentGW": {
+      "commandName": "Project",
+      "commandLineArgs": "SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendEntitlement": {
+      "commandName": "Project",
+      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendEntitlementEnv": {
+      "commandName": "Project",
+      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendEntitlementEnvGW": {
+      "commandName": "Project",
+      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "SendEntitlementEnvWhatIf": {
+      "commandName": "Project",
+      "commandLineArgs": "SendEntitlement --whatif true --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandAllocationPutWhatIf": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandAllocationPut": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandAllocationGet": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandAllocationGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f74e8233-dcad-e509-a2ed-e257505095b3",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandAllocationGetGccM": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandAllocationGet --tenantId a8037933-4d29-4ef8-8754-e67b2edd480b --environmentId 2fa11e00-50c1-ec50-bc11-a8145aaff80c",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "gov",
+        "CS_CATEGORY": "gov",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandCapacityGet": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandCapacityGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandEmitW365Consumption": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandEmitW365Consumption --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId 8e1a5eba-a86e-e441-9e96-206a862ef814",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    }
+  }
+}
