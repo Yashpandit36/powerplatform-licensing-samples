@@ -6,7 +6,7 @@
         "DOTNET_ENVIRONMENT": "Development",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "dev",
+        "CS_CATEGORY": "Dev",
         "CS_TYPE": "CustomerManagement",
         "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
       }

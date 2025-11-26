@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Neptune/ToolsNeptuneConsole/ToolsNeptuneConsole.csproj",
+                "${workspaceFolder}/src/sample.gateway/sample.gateway.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Neptune/ToolsNeptuneConsole/ToolsNeptuneConsole.csproj",
+                "${workspaceFolder}/src/sample.gateway/sample.gateway.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Neptune/ToolsNeptuneConsole/ToolsNeptuneConsole.csproj"
+                "${workspaceFolder}/src/sample.gateway/sample.gateway.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

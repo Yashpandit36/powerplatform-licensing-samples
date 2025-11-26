@@ -5,25 +5,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "get-ppapi-local-token",
-      "type": "coreclr",
-      "request": "launch",
-      "preLaunchTask": "build",
-      "program": "${workspaceFolder}/out/bin/Debug-x64/Neptune.ToolsConsole/win-x64/neptune-console.dll",
-      "args": [ ],
-      "cwd": "${workspaceFolder}",
-      "stopAtEntry": false,
-      "console": "internalConsole"
-    },
-    {
-      "type": "PowerShell",
-      "request": "launch",
-      "name": "PowerShell Launch (current file)",
-      "script": "${file}",
-      "args": [ "-query PerFlow -rptdir '.\\Neptune\\Neptune.Powershell\\' -outdir '.\\out\\reports\\'" ],
-      "cwd": "${workspaceFolder}"
-    },
-    {
       "name": "PowerShell Attach to Host Process",
       "type": "PowerShell",
       "request": "attach",
