@@ -1,0 +1,48 @@
+{
+  "powershell.pester.useLegacyCodeLens": true,
+  "powershell.powerShellDefaultVersion": "Windows PowerShell (x64)",
+  "powershell.promptToUpdatePowerShell": false,
+  "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
+  "powershell.integratedConsole.showOnStartup": false,
+  "cSpell.words": [],
+  "azureResourceManagerTools.checkForLatestSchema": true,
+  "files.associations": {
+    "**/ci/*.yml": "azure-pipelines",
+    "**/.pipelines/*.yml": "azure-pipelines",
+    "*.RolloutSpec.json": "jsonc",
+    "*ARMTemplate.json": "jsonc",
+    "*_Parameters.json.template": "jsonc",
+    "*.json.template": "jsonc",
+    "*_ScopeBindings.json": "jsonc",
+    "*_ServiceModelV2.json": "jsonc",
+    "*.xml": "xml",
+    "*.runsettings": "xml"
+  },
+  "files.exclude": {
+    "out/**/**RolloutSpec.json": true,
+    "out/**/Extensions/**_CreateCertificates*.json": false,
+    "out/**/Extensions/**_Onboard*.json": true,
+    "out/**/**_ServiceModelV2.json": true,
+    "out/**/**_ScopeBindings.json": false
+  },
+  "git.autofetch": true,
+  "[arm-template]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.tabSize": 2
+  },
+  "json.format.keepLines": true,
+  "yaml.completion": false,
+  "yaml.format.enable": true,
+  "[yaml]": {
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.formatOnPaste": false
+  },
+  "azure-pipelines.1ESPipelineTemplatesSchemaFile": true
+}

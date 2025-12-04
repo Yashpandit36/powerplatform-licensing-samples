@@ -1,0 +1,49 @@
+<Project>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<DirectoryBuildPropsHasBeenImported>true</DirectoryBuildPropsHasBeenImported>
+
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<DebugType Condition=" '$(Configuration)'=='Debug' and '$(DebugType)'==''">full</DebugType>
+
+		<Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+		<PlatformTarget Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">x64</PlatformTarget>
+		<PlatformTarget Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">x64</PlatformTarget>
+
+		<!-- Use C# 10 by default as we build with .NET6 SDK -->
+		<LangVersion>10</LangVersion>
+
+		<BinariesBuildTypeArchDirectory Condition="'$(BinariesBuildTypeArchDirectory)' == ''">$(MSBuildThisFileDirectory)out\bin\$(Configuration)-$(Platform)</BinariesBuildTypeArchDirectory>
+		<OutputPath Condition=" '$(OutputPath)' == '' ">$(BinariesBuildTypeArchDirectory)\$(MSBuildProjectName)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath Condition=" '$(AppendTargetFrameworkToOutputPath)' == '' ">false</AppendTargetFrameworkToOutputPath>
+		<PackageOutputPath>$(MSBuildThisFileDirectory)out\packages</PackageOutputPath>
+		<PdbsOutputPath>$(MSBuildThisFileDirectory)out\pdbs</PdbsOutputPath>
+
+		<RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<PkgNeptune>$(RepoRoot)packages</PkgNeptune>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!--
+			Disabled nuget packaging by default. This allows us to use 'pack' on the traversal targets, but only
+			run the actual nuget packaging steps on those projects that opt in.
+		-->
+		<IsPackable>false</IsPackable>
+		<!--
+			Turn off warning. This lets us invoke pack on dirs.proj to recursively pack all packable projects in the repo,
+			just like we do with 'restore', 'build', and 'test'.
+		-->
+		<WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+	</PropertyGroup>
+
+	<!-- 
+		Define a dummy Pack target to unblock recursive packing.
+
+		This will get overriden by Nuget.Build.Tasks.Pack.targets in new-style projects. But in old style projects,
+		it allows the Pack target to succeed, allowing us to recursively pack the repo with dirs.proj.
+	-->
+	<Target Name="Pack" DependsOnTargets="$(PackDependsOn)" />
+
+</Project>

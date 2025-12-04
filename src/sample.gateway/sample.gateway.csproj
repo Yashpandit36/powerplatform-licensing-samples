@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>sample.gateway</RootNamespace>
+		<AssemblyName>sample-gateway</AssemblyName>
+		<SelfContained>true</SelfContained>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<LangVersion>12.0</LangVersion>
+		<EnablePackageReferenceOverride>true</EnablePackageReferenceOverride>
+		<SupportedMSBuildNuGetPackageReference>1.7.9</SupportedMSBuildNuGetPackageReference>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="appsettings.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+			<DependentUpon>appsettings.json</DependentUpon>
+		</None>
+		<None Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.14.2" />
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.EventSource" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.74.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.0" />
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+		<PackageReference Include="Microsoft.PowerPlatform.Management" Version="2.0.3232.199" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+
+</Project>

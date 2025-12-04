@@ -1,0 +1,20 @@
+{
+  // see https://code.visualstudio.com/docs/editor/extension-gallery#_workspace-recommended-extensions
+  // for the documentation on extensions.json
+  "recommendations": [
+    "codezombiech.gitignore",
+    "esbenp.prettier-vscode",
+    "github.copilot-chat",
+    "GitHub.copilot",
+    "ms-azure-devops.azure-pipelines",
+    "ms-azuretools.vscode-azureresourcegroups",
+    "ms-azuretools.vscode-bicep",
+    "ms-dotnettools.csharp",
+    "MS-SarifVSCode.sarif-viewer",
+    "ms-vscode.azure-repos",
+    "ms-vscode.powershell",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "stylelint.vscode-stylelint"
+  ]
+}

@@ -1,0 +1,33 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# These files should maintain UNIX line endings
+*.sh text working-tree-encoding=utf-8 eol=lf
+*.azcli text eol=lf
+*.cmd text working-tree-encoding=utf-8 eol=crlf
+
+# These files should maintain Windows line endings
+*.ps1 text eol=lf
+*.psm1 text eol=lf
+*.cs text eol=crlf
+
+# Use text conventions for commonly used text extensions.
+*.csv text
+*.ini text
+*.json text
+*.txt text
+*.xml text
+*.order text
+
+# Denote all files that are truly binary and should not be modified.
+*.dll binary
+*.exe binary
+*.gz binary
+*.ico binary
+*.jpg binary
+*.lib binary
+*.pdb binary
+*.pdf binary
+*.png binary
+*.wim binary
+*.zip binary
