@@ -1,9 +1,8 @@
-﻿namespace sample.gateway
-{
-    public interface ICommandOptions
-    {
-        bool? WhatIf { get; set; }
+﻿namespace sample.gateway;
 
-        int NumberOfAttempts { get; set; }
-    }
+public interface ICommandOptions
+{
+    bool? WhatIf { get; set; }
+
+    int NumberOfAttempts { get; set; }
 }

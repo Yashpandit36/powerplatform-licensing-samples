@@ -1,26 +1,26 @@
-﻿namespace sample.gateway
+﻿namespace sample.gateway;
+
+using Microsoft.Extensions.Options;
+using sample.gateway.Discovery;
+using sample.gateway.Tokens;
+
+[Verb("CommandCapacityGet")]
+public class CommandCapacityGetOptions : CommandOptions
 {
-    using Microsoft.Extensions.Options;
-    using sample.gateway.Discovery;
+    [Option("tenantId", Required = false, SetName = "AllParameterSets", HelpText = "Tenant Id for which token will be issued")]
+    public string TenantId { get; set; }
 
-    [Verb("CommandCapacityGet")]
-    public class CommandCapacityGetOptions : CommandOptions
+    public int RunGenerateAndReturnExitCode(
+        IConfiguration configuration,
+        ILogger logger,
+        IServiceProvider serviceProvider)
     {
-        [Option("tenantId", Required = false, SetName = "AllParameterSets", HelpText = "Tenant Id for which token will be issued")]
-        public string TenantId { get; set; }
+        var authentication = serviceProvider.GetRequiredService<IMicrosoftAuthentication>();
+        var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
+        var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
 
-        public int RunGenerateAndReturnExitCode(
-            IConfiguration configuration,
-            ILogger logger,
-            IServiceProvider serviceProvider)
-        {
-            var authentication = serviceProvider.GetRequiredService<IMicrosoftAuthentication>();
-            var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
-            var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
-
-            var cmd = new CommandCapacityGet(this, configuration, gatewayConfig, neptuneDiscovery, logger);
-            var result = cmd.Run();
-            return result;
-        }
+        var cmd = new CommandCapacityGet(this, configuration, gatewayConfig, neptuneDiscovery, logger);
+        var result = cmd.Run();
+        return result;
     }
 }

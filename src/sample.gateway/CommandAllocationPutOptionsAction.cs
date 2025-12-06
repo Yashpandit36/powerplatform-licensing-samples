@@ -1,9 +1,8 @@
-﻿namespace sample.gateway
-{
-    public enum CommandAllocationPutOptionsAction
-    {
-        DisableDrawFromTenantPool,
+﻿namespace sample.gateway;
 
-        EnableDrawFromTenantPool,
-    }
+public enum CommandAllocationPutOptionsAction
+{
+    DisableDrawFromTenantPool,
+
+    EnableDrawFromTenantPool,
 }
