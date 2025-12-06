@@ -18,24 +18,9 @@
         public IReadOnlyDictionary<string, string> BapDnsZones { get; set; } = new Dictionary<string, string>();
 
         /// <summary>
-        /// Gets or sets Neptune DNS zones for different cluster categories.
-        /// </summary>
-        public IReadOnlyDictionary<string, string> NeptuneDnsZones { get; set; } = new Dictionary<string, string>();
-
-        /// <summary>
-        /// Gets or sets Power Apps DNS zones for different cluster categories.
-        /// </summary>
-        public IReadOnlyDictionary<string, string> PowerAppsDnsZones { get; set; } = new Dictionary<string, string>();
-
-        /// <summary>
         /// Gets or sets Power Platform API endpoint suffixes for different cluster categories.
         /// </summary>
         public IReadOnlyDictionary<string, string> PowerPlatformApiEndpointSuffixes { get; set; } = new Dictionary<string, string>();
-
-        /// <summary>
-        /// Gets or sets Power Platform user content endpoint suffixes for different cluster categories.
-        /// </summary>
-        public IReadOnlyDictionary<string, string> PowerPlatformUserContentEndpointSuffixes { get; set; } = new Dictionary<string, string>();
 
     }
 }

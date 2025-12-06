@@ -17,8 +17,6 @@
         /// <returns></returns>
         string GetGatewayEndpoint(TenantId tenantId, EnvironmentId environmentId = default);
         string GetGlobalEndpoint();
-        string GetNeptuneAudience();
-        string GetNeptuneEndpoint();
         string GetTenantEndpoint(TenantId tenantId);
         string GetTenantIslandClusterEndpoint(TenantId tenantId);
         string GetTokenAudience();

@@ -5,7 +5,6 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Hosting;
 
-    [ExcludeFromCodeCoverage]
     class Program
     {
         private static ICommandOptions commandOptions { get; set; }

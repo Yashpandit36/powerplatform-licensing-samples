@@ -52,24 +52,6 @@
             }
         }
 
-        public string GetNeptuneEndpoint()
-        {
-            var categoryName = _clusterCategory.ToString();
-            var configuredSuffix = _endpointSettings.NeptuneDnsZones?.TryGetValue(categoryName, out var suffix) == true ? suffix : null;
-
-            if (!string.IsNullOrEmpty(configuredSuffix))
-            {
-                return configuredSuffix;
-            }
-
-            throw new ArgumentException($"Invalid cluster category value: {categoryName}", nameof(categoryName));
-        }
-
-        public string GetNeptuneAudience()
-        {
-            return $"https://{GetNeptuneEndpoint()}/auth";
-        }
-
         public string GetBapEndpoint()
         {
             var categoryName = _clusterCategory.ToString();

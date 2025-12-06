@@ -9,20 +9,18 @@
     using Newtonsoft.Json;
     using sample.gateway.Discovery;
 
-    [ExcludeFromCodeCoverage]
-    public class CommandGatewaySendEntitlement : BaseCommand<CommandGatewaySendEntitlementOptions>
+    public class CommandEvaluateEntitlement : BaseCommand<CommandEvaluateEntitlementOptions>
     {
         private static readonly HttpClient client = new HttpClient();
         private readonly IMicrosoftAuthentication _microsoftAuthentication;
-        private ServiceClient _apiDiscovery;
         private readonly GatewayConfig _gatewayConfig;
         private readonly INeptuneDiscovery _neptuneDiscovery;
         private string _ClientId;
         private string _TenantId;
         private string _ServiceAuthRegionalCertSubjectName;
 
-        public CommandGatewaySendEntitlement(
-            CommandGatewaySendEntitlementOptions opts,
+        public CommandEvaluateEntitlement(
+            CommandEvaluateEntitlementOptions opts,
             IConfiguration configuration,
             ILogger logger,
             IOptionsMonitor<GatewayConfig> gatewayConfig,
@@ -40,8 +38,6 @@
             _TenantId = _gatewayConfig.FirstPartyInfrastructureTenantId;
             _ServiceAuthRegionalCertSubjectName = _gatewayConfig.ServiceAuthRegionalCertSubjectName;
 
-            ServiceClientFactory apiClientFactory = new ServiceClientFactory();
-            _apiDiscovery = apiClientFactory.Create(_ClientId);
         }
 
         public override int OnRun()

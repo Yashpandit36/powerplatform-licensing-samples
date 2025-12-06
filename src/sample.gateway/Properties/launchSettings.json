@@ -11,9 +11,9 @@
         "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
       }
     },
-    "SendRoleAssignment": {
+    "EvaluateRoleAssignment": {
       "commandName": "Project",
-      "commandLineArgs": "SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
+      "commandLineArgs": "EvaluateRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "ASPNETCORE_ENVIRONMENT": "Development",
@@ -23,9 +23,45 @@
         "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
       }
     },
-    "SendRoleAssignmentGW": {
+    "EvaluateEntitlement": {
       "commandName": "Project",
-      "commandLineArgs": "SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
+      "commandLineArgs": "EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "EvaluateEntitlementEnv": {
+      "commandName": "Project",
+      "commandLineArgs": "EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "EvaluateEntitlementEnvWhatIf": {
+      "commandName": "Project",
+      "commandLineArgs": "EvaluateEntitlement --whatif true --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "IslandCluster",
+        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+      }
+    },
+    "CommandAllocationPutEnableDrawWhatIf": {
+      "commandName": "Project",
+      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool --whatif true",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "ASPNETCORE_ENVIRONMENT": "Development",
@@ -35,55 +71,7 @@
         "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
       }
     },
-    "SendEntitlement": {
-      "commandName": "Project",
-      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "SendEntitlementEnv": {
-      "commandName": "Project",
-      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "SendEntitlementEnvGW": {
-      "commandName": "Project",
-      "commandLineArgs": "SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "SendEntitlementEnvWhatIf": {
-      "commandName": "Project",
-      "commandLineArgs": "SendEntitlement --whatif true --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "CommandAllocationPutWhatIf": {
+    "CommandAllocationPutDisableDrawWhatIf": {
       "commandName": "Project",
       "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
       "environmentVariables": {
@@ -140,18 +128,6 @@
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
         "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "CommandEmitW365Consumption": {
-      "commandName": "Project",
-      "commandLineArgs": "CommandEmitW365Consumption --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId 8e1a5eba-a86e-e441-9e96-206a862ef814",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
         "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
       }
     }

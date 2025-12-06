@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<LangVersion>12.0</LangVersion>
+		<LangVersion>13.0</LangVersion>
 		<EnablePackageReferenceOverride>true</EnablePackageReferenceOverride>
 		<SupportedMSBuildNuGetPackageReference>1.7.9</SupportedMSBuildNuGetPackageReference>
 	</PropertyGroup>

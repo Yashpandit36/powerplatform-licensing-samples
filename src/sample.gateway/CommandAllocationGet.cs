@@ -1,6 +1,5 @@
 ﻿namespace sample.gateway
 {
-    using System.Collections.Generic;
     using System.Net.Http;
     using System.Runtime.Versioning;
     using System.Threading;
@@ -9,8 +8,6 @@
 
     public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
     {
-        private static readonly HttpClient client = new();
-        private ServiceClient _apiDiscovery;
         private readonly GatewayConfig _gatewayConfig;
         private readonly INeptuneDiscovery _neptuneDiscovery;
         private string _clientId;
@@ -31,8 +28,6 @@
         public override void OnInit()
         {
             _clientId = PowershellClientId.ToString();
-            ServiceClientFactory apiClientFactory = new ServiceClientFactory();
-            _apiDiscovery = apiClientFactory.Create(_clientId);
 
             _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
 
@@ -53,8 +48,6 @@
             {
                 /// You need to be a Tenant Admin or an Environment Admin
                 /// 
-                List<CurrencyReportV2> reports = _apiDiscovery.Licensing.TenantCapacity.CurrencyReports.GetAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-
                 // Neptune PPAPI GW Tenant routing URL
                 string tenantUrl = _neptuneDiscovery.GetTenantEndpoint(Opts.TenantId);
                 Uri gatewayTenantUri = new Uri($"https://{tenantUrl}");

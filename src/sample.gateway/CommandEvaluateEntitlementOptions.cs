@@ -9,21 +9,20 @@
     /// <example>
     /// 
     /// Check Tenant Entitlement using the Tenant Island Route
-    /// SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 
+    /// EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 
     /// 
     /// Check Tenant Entitlement using the Gateway Route
-    /// SendEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --gateway true
+    /// EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --gateway true
     /// 
     /// Check Environment Entitlement using the Environment Route
-    /// SendEntitlement --tenantId a1a2578a-8fd3-4595-bb18-7d17df8944b0 --environmentId 4b62a25e-1c3d-e2bc-9270-307db9f15b00
+    /// EvaluateEntitlement --tenantId a1a2578a-8fd3-4595-bb18-7d17df8944b0 --environmentId 4b62a25e-1c3d-e2bc-9270-307db9f15b00
     /// 
     /// Check Environment Entitlement using the Gateway Route
-    /// SendEntitlement --tenantId a1a2578a-8fd3-4595-bb18-7d17df8944b0 --environmentId 4b62a25e-1c3d-e2bc-9270-307db9f15b00 --gateway true
+    /// EvaluateEntitlement --tenantId a1a2578a-8fd3-4595-bb18-7d17df8944b0 --environmentId 4b62a25e-1c3d-e2bc-9270-307db9f15b00 --gateway true
     /// 
     /// </example> 
-    [ExcludeFromCodeCoverage]
-    [Verb("SendEntitlement", HelpText = "This will use credentials from certificates to assert JWT tokens")]
-    public class CommandGatewaySendEntitlementOptions : CommandOptions
+    [Verb("EvaluateEntitlement", HelpText = "This will use credentials from certificates to assert JWT tokens")]
+    public class CommandEvaluateEntitlementOptions : CommandOptions
     {
         [Option("audience", Required = false, HelpText = "The audience for which to acquire a token")]
         public string Audience { get; set; }
@@ -46,7 +45,7 @@
             var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
             var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
 
-            var cmd = new CommandGatewaySendEntitlement(this, configuration, logger, gatewayConfig, neptuneDiscovery, authentication);
+            var cmd = new CommandEvaluateEntitlement(this, configuration, logger, gatewayConfig, neptuneDiscovery, authentication);
             var result = cmd.Run();
             return result;
         }

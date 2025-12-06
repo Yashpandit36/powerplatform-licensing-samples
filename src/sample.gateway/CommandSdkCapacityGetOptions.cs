@@ -3,14 +3,11 @@
     using Microsoft.Extensions.Options;
     using sample.gateway.Discovery;
 
-    [Verb("CommandAllocationPut")]
-    public class CommandAllocationPutOptions : CommandOptions
+    [Verb("CommandSdkCapacityGet")]
+    public class CommandSdkCapacityGetOptions : CommandOptions
     {
         [Option("tenantId", Required = false, SetName = "AllParameterSets", HelpText = "Tenant Id for which token will be issued")]
         public string TenantId { get; set; }
-
-        [Option(shortName: 'a', "action", Required = false, SetName = "AllParameterSets", HelpText = "Action to perform")]
-        public CommandAllocationPutOptionsAction Action { get; set; } = CommandAllocationPutOptionsAction.DisableDrawFromTenantPool;
 
         public int RunGenerateAndReturnExitCode(
             IConfiguration configuration,
@@ -21,7 +18,7 @@
             var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
             var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
 
-            var cmd = new CommandAllocationPut(this, configuration, gatewayConfig, neptuneDiscovery, logger);
+            var cmd = new CommandSdkCapacityGet(this, configuration, gatewayConfig, neptuneDiscovery, logger);
             var result = cmd.Run();
             return result;
         }
