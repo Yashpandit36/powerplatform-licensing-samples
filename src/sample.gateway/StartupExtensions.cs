@@ -49,14 +49,14 @@
 
         private static void EvaluateConfigurationSet<T>(IServiceCollection services, IConfiguration configuration, string sectionName) where T : class
         {
-            IConfigurationSection powerPlatformEndpointsSettingsOptions = configuration.GetSection(sectionName);
+            IConfigurationSection configSettingsOptions = configuration.GetSection(sectionName);
 
-            if (powerPlatformEndpointsSettingsOptions == default || !powerPlatformEndpointsSettingsOptions.Exists())
+            if (configSettingsOptions == default || !configSettingsOptions.Exists())
             {
                 throw new InvalidOperationException("Configuration is not set.");
             }
 
-            services.Configure<T>(powerPlatformEndpointsSettingsOptions);
+            services.Configure<T>(configSettingsOptions);
         }
 
         public static IServiceCollection AddAuthentication(this IServiceCollection services)
@@ -82,15 +82,17 @@
 
             switch (obj)
             {
-                case CommandGatewaySendRoleAssignmentOptions opts:
+                case CommandEvaluateRoleAssignmentOptions opts:
                     return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
-                case CommandGatewaySendEntitlementOptions opts:
+                case CommandEvaluateEntitlementOptions opts:
                     return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
                 case CommandAllocationPutOptions opts:
                     return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
                 case CommandAllocationGetOptions opts:
                     return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
                 case CommandCapacityGetOptions opts:
+                    return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
+                case CommandSdkCapacityGetOptions opts:
                     return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
             }
 

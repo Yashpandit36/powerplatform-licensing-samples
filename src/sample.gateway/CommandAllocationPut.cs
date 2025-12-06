@@ -12,13 +12,10 @@
     using Newtonsoft.Json.Serialization;
     using sample.gateway.Discovery;
 
-    [ExcludeFromCodeCoverage]
     public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
     {
-        private static readonly HttpClient client = new();
         private readonly GatewayConfig _gatewayConfig;
         private readonly INeptuneDiscovery _neptuneDiscovery;
-        private ServiceClient _apiDiscovery;
         private string _clientId;
         private Uri _authority;
         private IPublicClientApplication _clientApplication;
@@ -37,8 +34,6 @@
         public override void OnInit()
         {
             _clientId = PowershellClientId.ToString();
-            ServiceClientFactory apiClientFactory = new ServiceClientFactory();
-            _apiDiscovery = apiClientFactory.Create(_clientId);
 
             _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
 
@@ -61,13 +56,14 @@
 
                 // BAP Environment Discovery
                 int pagingBy = 2; // Number of items to fetch per page
-                Uri bapDomain = new Uri($"{_neptuneDiscovery.GetBapEndpoint()}"); // used to validate Nextlink contains relative base url
+                Uri bapDomain = new Uri($"https://{_neptuneDiscovery.GetBapEndpoint()}"); // used to validate Nextlink contains relative base url
                 Uri bapEnvironmentsUrl = new Uri(bapDomain, $"/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?api-version=2021-04-01&$top={pagingBy}&$select=name,properties.displayName,properties.createdTime,properties.tenantId,location");
 
                 // Neptune PPAPI GW Tenant routing URL
                 Uri gatewayTenantUri = new Uri($"https://{_neptuneDiscovery.GetTenantEndpoint(Opts.TenantId)}");
+                Uri islandGatewayTenantUri = new Uri($"https://{_neptuneDiscovery.GetTenantIslandClusterEndpoint(Opts.TenantId)}");
 
-                (bool flowControl, int value) = ProcessBapEnvironments(bapDomain, bapEnvironmentsUrl.ToString(), gatewayTenantUri, correlationId);
+                (bool flowControl, int value) = ProcessBapEnvironments(bapDomain, bapEnvironmentsUrl.ToString(), gatewayTenantUri, islandGatewayTenantUri, correlationId);
                 if (!flowControl)
                 {
                     return value;
@@ -83,7 +79,7 @@
 
         // Add the SupportedOSPlatform attribute to the method where TokenStorage.SaveToken is called
         [SupportedOSPlatform("windows")]
-        private (bool flowControl, int value) ProcessBapEnvironments(Uri bapBaseUri, string bapEnvironmentsUrl, Uri gatewayTenantUri, Guid correlationId)
+        private (bool flowControl, int value) ProcessBapEnvironments(Uri bapBaseUri, string bapEnvironmentsUrl, Uri gatewayTenantUri, Uri islandGatewayTenantUri, Guid correlationId)
         {
             if (!IsSafeNextLink(bapBaseUri, bapEnvironmentsUrl))
             {
@@ -194,13 +190,13 @@
             {
                 // Handle pagination if needed
                 TraceLogger.LogInformation("More environments to process, next link: {NextLink}", environments.NextLink);
-                return ProcessBapEnvironments(bapBaseUri, environments.NextLink, gatewayTenantUri, correlationId);
+                return ProcessBapEnvironments(bapBaseUri, environments.NextLink, gatewayTenantUri, islandGatewayTenantUri, correlationId);
             }
 
             return (flowControl: true, value: default);
         }
 
-        private static bool EnsureEntitlementEnforcement(AllocationPutRequestModel allocationPutRequestModel, EntitlementId entitlementId, EnforcementRuleTypes enforcementRuleType)
+        private bool EnsureEntitlementEnforcement(AllocationPutRequestModel allocationPutRequestModel, EntitlementId entitlementId, EnforcementRuleTypes enforcementRuleType)
         {
             EntitlementAllocationModel existingEntitlement = allocationPutRequestModel.AllocatedEntitlements.FirstOrDefault(fn => fn.EntitlementId == entitlementId);
             if (existingEntitlement == null)
@@ -218,7 +214,7 @@
                 {
                     new EnforcementRule
                     {
-                        IsEnabled = false,
+                        IsEnabled = Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool,
                         Type = enforcementRuleType
                     }
                 }
@@ -241,37 +237,35 @@
                     // If the entitlement exists but doesn't have the enforcement rule, add it
                     existingEntitlement.EnforcementRules.Add(new EnforcementRule
                     {
-                        IsEnabled = false,
+                        IsEnabled = Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool,
                         Type = enforcementRuleType
                     });
                     return true;
                 }
                 else
                 {
-                    // If the entitlement exists and has the enforcement rule, ensure it's set to false
+                    // If the entitlement exists and has the enforcement rule
                     if (entitlementRule.IsEnabled)
                     {
-                        entitlementRule.IsEnabled = false;
-                        return true; // Change was made
+                        // ensure it's set to false
+                        if (Opts.Action == CommandAllocationPutOptionsAction.DisableDrawFromTenantPool)
+                        {
+                            entitlementRule.IsEnabled = false;
+                            return true; // Change was made
+                        }
+                    }
+                    else
+                    {
+                        // ensure it's set to true
+                        if (Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool)
+                        {
+                            entitlementRule.IsEnabled = true;
+                            return true; // Change was made
+                        }
                     }
                 }
             }
 
-            return false;
-        }
-
-        // Example SSRF prevention: Make sure nextLink is on expected host and scheme
-        private bool IsSafeNextLink(Uri baseUri, string nextLink)
-        {
-            if (Uri.TryCreate(nextLink, UriKind.Absolute, out Uri uri))
-            {
-                // Only allow host & scheme you trust
-                if (uri.Host == baseUri.Host && uri.Scheme == baseUri.Scheme)
-                {
-                    // (Optional) additional path checks
-                    return true;
-                }
-            }
             return false;
         }
 

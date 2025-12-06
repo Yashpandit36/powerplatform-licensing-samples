@@ -250,5 +250,25 @@
                 return token.AccessToken;
             }
         }
+
+        /// <summary>
+        /// Example SSRF prevention: Make sure nextLink is on expected host and scheme
+        /// </summary>
+        /// <param name="baseUri">the root domain for the initial request.</param>
+        /// <param name="nextLink">the nextLink from paged results, to validate.</param>
+        /// <returns></returns>
+        internal static bool IsSafeNextLink(Uri baseUri, string nextLink)
+        {
+            if (Uri.TryCreate(nextLink, UriKind.Absolute, out Uri uri))
+            {
+                // Only allow host & scheme you trust
+                if (uri.Host == baseUri.Host && uri.Scheme == baseUri.Scheme)
+                {
+                    // (Optional) additional path checks
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

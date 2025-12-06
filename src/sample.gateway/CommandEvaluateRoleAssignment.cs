@@ -9,20 +9,18 @@
     using Newtonsoft.Json;
     using sample.gateway.Discovery;
 
-    [ExcludeFromCodeCoverage]
-    public class CommandGatewaySendRoleAssignment : BaseCommand<CommandGatewaySendRoleAssignmentOptions>
+    public class CommandEvaluateRoleAssignment : BaseCommand<CommandEvaluateRoleAssignmentOptions>
     {
         private static readonly HttpClient client = new();
         private readonly IMicrosoftAuthentication _microsoftAuthentication;
-        private ServiceClient _apiDiscovery;
         private readonly GatewayConfig _gatewayConfig;
         private readonly INeptuneDiscovery _neptuneDiscovery;
         private string _ClientId;
         private string _TenantId;
         private string _ServiceAuthRegionalCertSubjectName;
 
-        public CommandGatewaySendRoleAssignment(
-            CommandGatewaySendRoleAssignmentOptions opts,
+        public CommandEvaluateRoleAssignment(
+            CommandEvaluateRoleAssignmentOptions opts,
             IConfiguration configuration,
             ILogger logger,
             IOptionsMonitor<GatewayConfig> gatewayConfig,
@@ -39,9 +37,6 @@
             _ClientId = _gatewayConfig.ClientId;
             _TenantId = _gatewayConfig.FirstPartyInfrastructureTenantId;
             _ServiceAuthRegionalCertSubjectName = _gatewayConfig.ServiceAuthRegionalCertSubjectName;
-
-            ServiceClientFactory apiClientFactory = new ServiceClientFactory();
-            _apiDiscovery = apiClientFactory.Create(_ClientId);
         }
 
         public override int OnRun()

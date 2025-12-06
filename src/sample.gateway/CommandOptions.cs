@@ -3,7 +3,6 @@
     /// <summary>
     /// Common options for all commands
     /// </summary>
-    [ExcludeFromCodeCoverage]
     public class CommandOptions : ICommandOptions
     {
         [Option('w', "whatif", Required = false, HelpText = "provides for what if scenarios, present changes before asserting them.")]

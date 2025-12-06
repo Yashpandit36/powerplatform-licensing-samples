@@ -14,15 +14,14 @@
     /// <example>
     /// 
     /// Check Role Assignment using the Tenant Island Route
-    /// SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99
+    /// EvaluateRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99
     /// 
     /// Check Role Assignment using the Gateway Route
-    /// SendRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99 --gateway true
+    /// EvaluateRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99 --gateway true
     /// 
     /// </example>
-    [ExcludeFromCodeCoverage]
-    [Verb("SendRoleAssignment", HelpText = "This will use credentials from certificates to assert JWT tokens")]
-    public class CommandGatewaySendRoleAssignmentOptions : CommandOptions
+    [Verb("EvaluateRoleAssignment", HelpText = "This will use credentials from certificates to assert JWT tokens")]
+    public class CommandEvaluateRoleAssignmentOptions : CommandOptions
     {
         [Option("audience", Required = false, HelpText = "The audience for which to acquire a token")]
         public string Audience { get; set; }
@@ -42,7 +41,7 @@
             var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
             var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
 
-            var cmd = new CommandGatewaySendRoleAssignment(this, configuration, logger, gatewayConfig, neptuneDiscovery, authentication);
+            var cmd = new CommandEvaluateRoleAssignment(this, configuration, logger, gatewayConfig, neptuneDiscovery, authentication);
             var result = cmd.Run();
             return result;
         }
