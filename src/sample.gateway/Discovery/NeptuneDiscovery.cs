@@ -9,10 +9,8 @@
         private static readonly string EnvironmentInfix = "environment";
         private const string TenantIslandPrefix = "il-";
 
-        private readonly ClusterCategory _clusterCategory;
-        private readonly ClusterType _clusterType;
-        private readonly GatewayConfig _gatewayConfig;
-        private readonly PowerPlatformEndpointsSettings _endpointSettings;
+        private readonly IOptionsMonitor<GatewayConfig> _gatewayConfig;
+        private readonly IOptionsMonitor<PowerPlatformEndpointsSettings> _endpointSettings;
         private readonly string endpointSuffix;
         private readonly int idSuffixLength;
 
@@ -20,20 +18,18 @@
             IOptionsMonitor<GatewayConfig> gatewayConfig,
             IOptionsMonitor<PowerPlatformEndpointsSettings> endpointSettings)
         {
-            _gatewayConfig = gatewayConfig.CurrentValue;
-            _endpointSettings = endpointSettings.CurrentValue;
-            _clusterCategory = _gatewayConfig.ClusterCategory;
-            _clusterType = _gatewayConfig.ClusterType;
-            this.endpointSuffix = GetEndpointSuffix(_clusterCategory);
-            this.idSuffixLength = GetIdSuffixLength(_clusterCategory);
+            _gatewayConfig = gatewayConfig;
+            _endpointSettings = endpointSettings;
+            this.endpointSuffix = GetEndpointSuffix(_gatewayConfig.CurrentValue.ClusterCategory);
+            this.idSuffixLength = GetIdSuffixLength(_gatewayConfig.CurrentValue.ClusterCategory);
         }
 
-        public ClusterCategory ClusterCategory => _clusterCategory;
-        public ClusterType ClusterType => _clusterType;
+        public ClusterCategory ClusterCategory => _gatewayConfig.CurrentValue.ClusterCategory;
+        public ClusterType ClusterType => _gatewayConfig.CurrentValue.ClusterType;
 
         public string GetGatewayEndpoint(TenantId tenantId, EnvironmentId environmentId = default)
         {
-            if (_clusterType == ClusterType.CustomerManagement)
+            if (_gatewayConfig.CurrentValue.ClusterType == ClusterType.CustomerManagement)
             {
                 if (environmentId != default)
                 {
@@ -54,8 +50,8 @@
 
         public string GetBapEndpoint()
         {
-            var categoryName = _clusterCategory.ToString();
-            var configuredSuffix = _endpointSettings.BapDnsZones?.TryGetValue(categoryName, out var suffix) == true ? suffix : null;
+            string categoryName = _gatewayConfig.CurrentValue.ClusterCategory.ToString();
+            string configuredSuffix = _endpointSettings.CurrentValue.BapDnsZones?.TryGetValue(categoryName, out string suffix) == true ? suffix : null;
 
             if (!string.IsNullOrEmpty(configuredSuffix))
             {
@@ -67,7 +63,15 @@
 
         public string GetBapAudience()
         {
-            return $"https://{GetBapEndpoint()}/";
+            string categoryName = _gatewayConfig.CurrentValue.ClusterCategory.ToString();
+            string configuredSuffix = _endpointSettings.CurrentValue.BapDnsAudience?.TryGetValue(categoryName, out string suffix) == true ? suffix : null;
+
+            if (!string.IsNullOrEmpty(configuredSuffix))
+            {
+                return $"https://{configuredSuffix}/";
+            }
+
+            throw new ArgumentException($"Invalid cluster category value: {categoryName}", nameof(categoryName));
         }
 
         public string GetTokenAudience()
@@ -105,8 +109,8 @@
 
         private string GetEndpointSuffix(ClusterCategory category)
         {
-            var categoryName = category.ToString();
-            var configuredSuffix = _endpointSettings.PowerPlatformApiEndpointSuffixes?.TryGetValue(categoryName, out var suffix) == true ? suffix : null;
+            string categoryName = category.ToString();
+            string configuredSuffix = _endpointSettings.CurrentValue.PowerPlatformApiEndpointSuffixes?.TryGetValue(categoryName, out string suffix) == true ? suffix : null;
 
             if (!string.IsNullOrEmpty(configuredSuffix))
             {

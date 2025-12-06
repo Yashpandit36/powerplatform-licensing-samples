@@ -146,14 +146,14 @@
                         Formatting = Formatting.Indented,
                         ContractResolver = new CamelCasePropertyNamesContractResolver(),
                         Converters = new List<JsonConverter>
-                    {
-                        new StringEnumConverter(),
-                        new ModelTypeConverter<EntitlementId>(),
-                        new ModelTypeConverter<EnvironmentGroupId>(),
-                        new ModelTypeConverter<EnvironmentId>(),
-                        new ModelTypeConverter<TenantId>(),
-                        new ModelTypeConverter<UserId>(),
-                    },
+                        {
+                            new StringEnumConverter(),
+                            new ModelTypeConverter<EntitlementId>(),
+                            new ModelTypeConverter<EnvironmentGroupId>(),
+                            new ModelTypeConverter<EnvironmentId>(),
+                            new ModelTypeConverter<TenantId>(),
+                            new ModelTypeConverter<UserId>(),
+                        },
                     });
 
                     if (!HasChanges)
