@@ -195,7 +195,6 @@ public abstract class BaseCommand<T> where T : ICommandOptions
 
         HttpRequestMessage request = new(HttpMethod.Get, url);
         request.Headers.Add("Authorization", $"Bearer {accessToken}");
-        request.Headers.Add("User-Agent", "neptune-sample");
         request.Headers.Add("x-ms-client-tenant-id", tenantId);
         request.Headers.Add("x-ms-correlation-id", correlationId.ToString());
 

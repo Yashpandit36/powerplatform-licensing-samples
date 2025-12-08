@@ -1,7 +1,7 @@
 ﻿namespace sample.gateway.Tokens;
 
-using Microsoft.Identity.Client;
 using System.Net.Http;
+using Microsoft.Identity.Client;
 
 public sealed class MsalRequestHttpClientFactory : IMsalHttpClientFactory, IDisposable
 {
@@ -17,7 +17,7 @@ public sealed class MsalRequestHttpClientFactory : IMsalHttpClientFactory, IDisp
 
         this.logger = loggerFactory.CreateLogger<MsalRequestHttpClientFactory>();
 
-        var innerHandler =
+        HttpClientHandler innerHandler =
 #if NETCOREAPP2_1_OR_GREATER
             new HttpClientHandler()
             {

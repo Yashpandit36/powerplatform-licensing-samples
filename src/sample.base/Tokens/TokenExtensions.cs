@@ -31,7 +31,7 @@ public static class TokenExtensions
             return resource;
         }
 
-        var resourceWithTrailingSlash = resource.GetResourceWithTrailingSlash();
+        string resourceWithTrailingSlash = resource.GetResourceWithTrailingSlash();
         return $"{resourceWithTrailingSlash}{scope}";
     }
 
@@ -57,7 +57,7 @@ public static class TokenExtensions
     /// <returns></returns>
     public static string GetResourceWithTrailingSlash(this string resource)
     {
-        var trailingSlash = System.IO.Path.AltDirectorySeparatorChar.ToString();
+        string trailingSlash = System.IO.Path.AltDirectorySeparatorChar.ToString();
         if (!string.IsNullOrWhiteSpace(resource) && !resource.EndsWith(trailingSlash))
         {
             resource += trailingSlash;
