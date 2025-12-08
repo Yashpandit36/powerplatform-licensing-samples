@@ -4,42 +4,15 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading;
-using Microsoft.Extensions.Options;
-using sample.gateway.Discovery;
-using sample.gateway.Tokens;
 
 public class CommandCapacityGet : BaseCommand<CommandCapacityGetOptions>
 {
-    private readonly GatewayConfig _gatewayConfig;
-    private readonly INeptuneDiscovery _neptuneDiscovery;
-    private string _clientId;
-    private Uri _authority;
-    private IPublicClientApplication _clientApplication;
-
     public CommandCapacityGet(
         CommandCapacityGetOptions opts,
         IConfiguration configuration,
-        IOptionsMonitor<GatewayConfig> gatewayConfig,
-        INeptuneDiscovery neptuneDiscovery,
-        ILogger logger) : base(opts, configuration, logger)
+        ILogger logger,
+        IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
     {
-        _gatewayConfig = gatewayConfig?.CurrentValue ?? throw new ArgumentNullException(nameof(gatewayConfig));
-        _neptuneDiscovery = neptuneDiscovery ?? throw new ArgumentNullException(nameof(neptuneDiscovery));
-    }
-
-    public override void OnInit()
-    {
-        _clientId = PowershellClientId.ToString();
-
-        _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
-
-        // Will will use a Public Client to obtain tokens interactively
-        _clientApplication = PublicClientApplicationBuilder
-          .Create(_clientId)
-          .WithAuthority(_authority.ToString(), validateAuthority: true)
-          .WithDefaultRedirectUri()
-          .WithInstanceDiscovery(enableInstanceDiscovery: true)
-          .Build();
     }
 
     // Add the SupportedOSPlatform attribute to the method where TokenStorage.SaveToken is called
@@ -51,7 +24,7 @@ public class CommandCapacityGet : BaseCommand<CommandCapacityGetOptions>
             /// You need to be a Tenant Admin or an Environment Admin
             /// 
             // Neptune PPAPI GW Tenant routing URL
-            string tenantUrl = _neptuneDiscovery.GetTenantEndpoint(Opts.TenantId);
+            string tenantUrl = _neptuneDiscovery.GetGatewayEndpoint(Opts.TenantId);
             Uri gatewayTenantUri = new Uri($"https://{tenantUrl}");
 
             (bool flowControl, string value) = GetCapacityReport(gatewayTenantUri, Opts.TenantId);
@@ -77,7 +50,7 @@ public class CommandCapacityGet : BaseCommand<CommandCapacityGetOptions>
     {
         string gatewayResource = _neptuneDiscovery.GetTokenAudience();
         string tokenPrefix = _neptuneDiscovery.ClusterCategory.ToString();
-        string gatewayAccessToken = OnAcquireUserToken(_clientApplication, _authority, _clientId, gatewayResource, tokenPrefix, "gateway").GetAwaiter().GetResult();
+        string gatewayAccessToken = OnAcquireUserToken(_clientId, gatewayResource, tokenPrefix, "gateway").GetAwaiter().GetResult();
         if (string.IsNullOrWhiteSpace(gatewayAccessToken))
         {
             TraceLogger.LogError("Failed to acquire token for gateway.");

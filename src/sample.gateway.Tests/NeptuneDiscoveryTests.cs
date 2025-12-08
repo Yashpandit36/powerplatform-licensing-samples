@@ -76,9 +76,6 @@ public class NeptuneDiscoveryTests
         mockOptions.Setup(m => m.CurrentValue)
             .Returns(new GatewayConfig
             {
-                ClientId = "test-client-id",
-                FirstPartyInfrastructureTenantId = "test-tenant-id",
-                ServiceAuthRegionalCertSubjectName = "test-cert-subject-name",
                 ClusterCategory = ClusterCategory.Dev,
                 ClusterType = ClusterType.CustomerManagement,
             });
@@ -109,9 +106,6 @@ public class NeptuneDiscoveryTests
             mockOptions.Setup(m => m.CurrentValue)
                 .Returns(new GatewayConfig
                 {
-                    ClientId = "test-client-id",
-                    FirstPartyInfrastructureTenantId = "test-tenant-id",
-                    ServiceAuthRegionalCertSubjectName = "test-cert-subject-name",
                     ClusterCategory = setting,
                     ClusterType = ClusterType.CustomerManagement,
                 });
@@ -130,9 +124,6 @@ public class NeptuneDiscoveryTests
         mockOptions.Setup(m => m.CurrentValue)
             .Returns(new GatewayConfig
             {
-                ClientId = "test-client-id",
-                FirstPartyInfrastructureTenantId = "test-tenant-id",
-                ServiceAuthRegionalCertSubjectName = "test-cert-subject-name",
                 ClusterCategory = ClusterCategory.Test,
                 ClusterType = ClusterType.IslandCluster,
             });
@@ -156,9 +147,6 @@ public class NeptuneDiscoveryTests
             mockOptions.Setup(m => m.CurrentValue)
                 .Returns(new GatewayConfig
                 {
-                    ClientId = "test-client-id",
-                    FirstPartyInfrastructureTenantId = "test-tenant-id",
-                    ServiceAuthRegionalCertSubjectName = "test-cert-subject-name",
                     ClusterCategory = setting,
                     ClusterType = ClusterType.IslandCluster,
                 });

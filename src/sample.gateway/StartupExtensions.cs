@@ -62,9 +62,7 @@ public static class StartupExtensions
 
     public static IServiceCollection AddAuthentication(this IServiceCollection services)
     {
-        services.AddSingleton<IMsalHttpClientFactory, ConfidentialClientHttpClientFactory>();
-        services.AddSingleton<IMsalCredentialFactory, MsalCredentialFactory>();
-        services.AddSingleton<IMicrosoftAuthentication, MicrosoftAuthentication>();
+        services.AddSingleton<IMsalHttpClientFactory, MsalRequestHttpClientFactory>();
 
         return services;
     }
@@ -78,16 +76,18 @@ public static class StartupExtensions
     public static int VerbRunner(this ICommandOptions obj, IHost host, ILogger appLogger)
     {
         IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
-        string coreSettings = config.GetValue<string>("Authentication:AzureEnvironment");
+        string coreSettings = config.GetValue<string>("Gateway:ClusterCategory");
         appLogger.LogInformation($"Running in config {coreSettings}");
 
         switch (obj)
         {
-            case CommandEvaluateRoleAssignmentOptions opts:
+            case CommandBillingPoliciesGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
-            case CommandEvaluateEntitlementOptions opts:
+            case CommandBillingPolicyEnvironmentGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
-            case CommandAllocationPutOptions opts:
+            case CommandEnvironmentBillingGetOptions opts:
+                return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
+            case CommandAllocationPatchOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
             case CommandAllocationGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);

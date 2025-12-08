@@ -9,11 +9,8 @@ public sealed class GatewayConfig
 
     public string AuthenticationEndpoint { get; set; }
     public string Authority { get; set; }
-    public string ClientId { get; set; }
     public ClusterCategory ClusterCategory { get; set; }
     public ClusterType ClusterType { get; set; }
     public string Environment { get; set; }
-    public string FirstPartyInfrastructureTenantId { get; set; }
-    public string ServiceAuthRegionalCertSubjectName { get; set; }
 
 }

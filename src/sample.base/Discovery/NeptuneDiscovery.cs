@@ -22,8 +22,13 @@ public class NeptuneDiscovery : INeptuneDiscovery
     public ClusterCategory ClusterCategory => _gatewayConfig.CurrentValue.ClusterCategory;
     public ClusterType ClusterType => _gatewayConfig.CurrentValue.ClusterType;
 
-    public string GetGatewayEndpoint(TenantId tenantId, EnvironmentId environmentId = default)
+    public string GetGatewayEndpoint(TenantId tenantId = default, EnvironmentId environmentId = default)
     {
+        if (tenantId == default)
+        {
+            return GetGlobalEndpoint();
+        }
+
         if (_gatewayConfig.CurrentValue.ClusterType == ClusterType.CustomerManagement)
         {
             if (environmentId != default)
@@ -92,17 +97,17 @@ public class NeptuneDiscovery : INeptuneDiscovery
         return EndpointSuffix;
     }
 
-    public string GetTenantEndpoint(TenantId tenantId)
+    internal string GetTenantEndpoint(TenantId tenantId)
     {
         return BuildEndpoint(TenantInfix, tenantId.ToString());
     }
 
-    public string GetTenantIslandClusterEndpoint(TenantId tenantId)
+    internal string GetTenantIslandClusterEndpoint(TenantId tenantId)
     {
         return BuildEndpoint(TenantInfix, tenantId.ToString(), TenantIslandPrefix);
     }
 
-    public string GetEnvironmentEndpoint(EnvironmentId environmentId)
+    internal string GetEnvironmentEndpoint(EnvironmentId environmentId)
     {
         return BuildEndpoint(EnvironmentInfix, environmentId.ToString());
     }

@@ -3,20 +3,19 @@
 using Microsoft.Identity.Client;
 using System.Net.Http;
 
-[ExcludeFromCodeCoverage]
-public sealed class ConfidentialClientHttpClientFactory : IMsalHttpClientFactory, IDisposable
+public sealed class MsalRequestHttpClientFactory : IMsalHttpClientFactory, IDisposable
 {
-    private readonly ILogger<ConfidentialClientHttpClientFactory> logger;
+    private readonly ILogger<MsalRequestHttpClientFactory> logger;
     private HttpClient httpClient;
 
     /// <summary>
-    /// Creates a new instance of <see cref="ConfidentialClientHttpClientFactory"/> to be shared across all CCAs.
+    /// Creates a new instance of <see cref="MsalRequestHttpClientFactory"/> to be shared across all CCAs.
     /// </summary>
     /// <param name="loggerFactory">The logger factory.</param>
-    public ConfidentialClientHttpClientFactory(ILoggerFactory loggerFactory)
+    public MsalRequestHttpClientFactory(ILoggerFactory loggerFactory)
     {
 
-        this.logger = loggerFactory.CreateLogger<ConfidentialClientHttpClientFactory>();
+        this.logger = loggerFactory.CreateLogger<MsalRequestHttpClientFactory>();
 
         var innerHandler =
 #if NETCOREAPP2_1_OR_GREATER

@@ -5,6 +5,8 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using sample.gateway.Discovery;
 using sample.gateway.Tokens;
 
 public abstract class BaseCommand<T> where T : ICommandOptions
@@ -12,19 +14,43 @@ public abstract class BaseCommand<T> where T : ICommandOptions
     public IConfiguration Configuration { get; }
     public virtual T Opts { get; }
     public ILogger TraceLogger { get; }
-    private static readonly HttpClient client = new();
+
+    internal readonly GatewayConfig _gatewayConfig;
+    internal readonly INeptuneDiscovery _neptuneDiscovery;
+    internal readonly IMsalHttpClientFactory _msalFactory;
 
     /// <summary>
     /// Microsoft Powershell
     /// </summary>
     internal Guid PowershellClientId { get; } = Guid.Parse("1950a258-227b-4e31-a9cf-717495945fc2");
 
-    protected BaseCommand(T opts, IConfiguration configuration, ILogger logger)
+    /// <summary>
+    /// The EntraId application (client) id
+    /// </summary>
+    internal virtual string _clientId { get; set; }
+    /// <summary>
+    /// The authority typically login.microsoftonline.com/common or login.microsoft.com/<tenantid>
+    /// </summary>
+    internal virtual Uri _authority { get; set; }
+    /// <summary>
+    /// The MSAL client to aquire tokens.
+    /// </summary>
+    internal virtual IPublicClientApplication _clientApplication { get; set; }
+
+    protected BaseCommand(
+        T opts,
+        IConfiguration configuration,
+        ILogger logger,
+        IServiceProvider serviceProvider)
     {
         Opts = opts ?? throw new ArgumentNullException(nameof(opts), "CommonOptions object is required.");
         Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration), "IAppSettings is required.");
         LoggerAvailable = false;
         TraceLogger = logger;
+
+        _gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>().CurrentValue;
+        _msalFactory = serviceProvider.GetRequiredService<IMsalHttpClientFactory>();
+        _neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
     }
 
     public int Run()
@@ -49,7 +75,20 @@ public abstract class BaseCommand<T> where T : ICommandOptions
         return result;
     }
 
-    public abstract void OnInit();
+    public virtual void OnInit()
+    {
+        _clientId = PowershellClientId.ToString();
+
+        _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
+
+        // Will will use a Public Client to obtain tokens interactively
+        _clientApplication = PublicClientApplicationBuilder
+          .Create(_clientId)
+          .WithAuthority(_authority.ToString(), validateAuthority: true)
+          .WithDefaultRedirectUri()
+          .WithInstanceDiscovery(enableInstanceDiscovery: true)
+          .Build();
+    }
 
     public abstract int OnRun();
 
@@ -167,7 +206,7 @@ public abstract class BaseCommand<T> where T : ICommandOptions
                 request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
             }
 
-            HttpResponseMessage response = client.SendAsync(request, cancellationToken).Result;
+            HttpResponseMessage response = _msalFactory.GetHttpClient().SendAsync(request, cancellationToken).Result;
 
             TraceLogger.LogInformation("Request Status Code = {StatusCode}:  CorrelationId = {CorrelationId}", response.StatusCode, correlationId);
 
@@ -203,35 +242,33 @@ public abstract class BaseCommand<T> where T : ICommandOptions
     /// This method acquires a user token interactively using MSAL.NET's PublicClientApplication.
     /// Please note that this method is only supported on Windows platforms due to storing the token in the user roaming store.
     /// </summary>
-    /// <param name="clientApplication">The MSAL client to aquire tokens.</param>
-    /// <param name="authority">The authority typically login.microsoftonline.com/common or login.microsoft.com/<tenantid>.</tenantid></param>
     /// <param name="clientId">The application registered in the EntraID for the <tenantid> specified in the authority.</param>
     /// <param name="resource">The 'scope' or 'audience' for which the token will be claimed.</param>
     /// <param name="tokenPrefix">Used to differentiate token storage.</param>
     /// <param name="tokenResource"></param>
+    /// <paramref>The cancellation token to handle the thread requests.</paramref>
     /// <returns>A cached access token.</returns>
     [SupportedOSPlatform("windows")]
     internal virtual async Task<string> OnAcquireUserToken(
-        IPublicClientApplication clientApplication,
-        Uri authority,
         string clientId,
         string resource,
         string tokenPrefix,
-        string tokenResource)
+        string tokenResource,
+        CancellationToken cancellationToken = default)
     {
         string[] scopes = new[] { resource.GetScopeEnsureResourceTrailingSlash() };
         string resourceScoped = $"{tokenPrefix}-{tokenResource}".ToLowerInvariant();
 
         // The consent URL is not used in this method, but it can be useful for debugging or manual consent
         // We need the user to provide consent once
-        TraceLogger.LogInformation($"Consent URL: {authority}/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&scope=user.read");
+        TraceLogger.LogInformation($"Consent URL: {_authority}/oauth2/v2.0/authorize?client_id={clientId}&response_type=code&scope=user.read");
 
-        var token = TokenStorage.LoadToken(resourceScoped);
+        TokenInfo token = TokenStorage.LoadToken(resourceScoped);
 
         if (token == null || token.ExpirationUtc <= DateTime.UtcNow)
         {
             // Token missing or expired: Get new token from server!
-            var authenticationResult = await clientApplication
+            AuthenticationResult authenticationResult = await _clientApplication
                 .AcquireTokenInteractive(scopes)
                 .ExecuteAsync();
             string accessToken = authenticationResult.AccessToken;

@@ -1,20 +1,16 @@
 ﻿namespace sample.gateway;
 
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using sample.gateway.Discovery;
 
 public class CommandSdkCapacityGet : BaseCommand<CommandSdkCapacityGetOptions>
 {
     private ServiceClient _apiDiscovery;
-    private string _clientId;
 
     public CommandSdkCapacityGet(
         CommandSdkCapacityGetOptions opts,
         IConfiguration configuration,
-        IOptionsMonitor<GatewayConfig> gatewayConfig,
-        INeptuneDiscovery neptuneDiscovery,
-        ILogger logger) : base(opts, configuration, logger)
+        ILogger logger,
+        IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
     {
     }
 

@@ -3,42 +3,15 @@
 using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading;
-using Microsoft.Extensions.Options;
-using sample.gateway.Discovery;
-using sample.gateway.Tokens;
 
 public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
 {
-    private readonly GatewayConfig _gatewayConfig;
-    private readonly INeptuneDiscovery _neptuneDiscovery;
-    private string _clientId;
-    private Uri _authority;
-    private IPublicClientApplication _clientApplication;
-
     public CommandAllocationGet(
         CommandAllocationGetOptions opts,
         IConfiguration configuration,
-        IOptionsMonitor<GatewayConfig> gatewayConfig,
-        INeptuneDiscovery neptuneDiscovery,
-        ILogger logger) : base(opts, configuration, logger)
+        ILogger logger,
+        IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
     {
-        _gatewayConfig = gatewayConfig?.CurrentValue ?? throw new ArgumentNullException(nameof(gatewayConfig));
-        _neptuneDiscovery = neptuneDiscovery ?? throw new ArgumentNullException(nameof(neptuneDiscovery));
-    }
-
-    public override void OnInit()
-    {
-        _clientId = PowershellClientId.ToString();
-
-        _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
-
-        // Will will use a Public Client to obtain tokens interactively
-        _clientApplication = PublicClientApplicationBuilder
-          .Create(_clientId)
-          .WithAuthority(_authority.ToString(), validateAuthority: true)
-          .WithDefaultRedirectUri()
-          .WithInstanceDiscovery(enableInstanceDiscovery: true)
-          .Build();
     }
 
     // Add the SupportedOSPlatform attribute to the method where TokenStorage.SaveToken is called
@@ -50,7 +23,7 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
             /// You need to be a Tenant Admin or an Environment Admin
             /// 
             // Neptune PPAPI GW Tenant routing URL
-            string tenantUrl = _neptuneDiscovery.GetTenantEndpoint(Opts.TenantId);
+            string tenantUrl = _neptuneDiscovery.GetGatewayEndpoint(Opts.TenantId);
             Uri gatewayTenantUri = new Uri($"https://{tenantUrl}");
 
             (bool flowControl, string value) = GetEnvironmentAllocation(gatewayTenantUri, Opts.TenantId, Opts.EnvironmentId);
@@ -78,7 +51,7 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
         string tokenPrefix = _neptuneDiscovery.ClusterCategory.ToString();
         string tokenSuffix = "gateway";
 
-        string gatewayAccessToken = OnAcquireUserToken(_clientApplication, _authority, _clientId, gatewayResource, tokenPrefix, tokenSuffix).GetAwaiter().GetResult();
+        string gatewayAccessToken = OnAcquireUserToken(_clientId, gatewayResource, tokenPrefix, tokenSuffix).GetAwaiter().GetResult();
 
         if (string.IsNullOrWhiteSpace(gatewayAccessToken))
         {
@@ -86,10 +59,10 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
             return (flowControl: false, value: string.Empty);
         }
 
-        bool allocationsOk = false;
+        bool responseOk = false;
         Uri allocationsUrl = new Uri(gatewayTenantUri, $"/licensing/environments/{environmentId}/allocations?api-version=2022-03-01-preview");
-        string allocationsResponse = OnSendAsync(allocationsUrl.ToString(), tenantId, gatewayAccessToken, httpMethod: HttpMethod.Get, correlationId: Guid.NewGuid(), cancellationToken: CancellationToken.None);
-        if (string.IsNullOrWhiteSpace(allocationsResponse))
+        string gatewayResponse = OnSendAsync(allocationsUrl.ToString(), tenantId, gatewayAccessToken, httpMethod: HttpMethod.Get, correlationId: Guid.NewGuid(), cancellationToken: CancellationToken.None);
+        if (string.IsNullOrWhiteSpace(gatewayResponse))
         {
             TraceLogger.LogInformation($"Failed {allocationsUrl}.");
             TraceLogger.LogInformation($"Failed to retrieve allocations {environmentId}.");
@@ -97,11 +70,11 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
         else
         {
             TraceLogger.LogInformation($"Succeeded {allocationsUrl}.");
-            TraceLogger.LogInformation($"Allocations for {environmentId}: {allocationsResponse}");
-            allocationsOk = true;
+            TraceLogger.LogInformation($"Allocations for {environmentId}: {gatewayResponse}");
+            responseOk = true;
         }
 
-        return (flowControl: allocationsOk, value: allocationsResponse);
+        return (flowControl: responseOk, value: gatewayResponse);
     }
 
 }

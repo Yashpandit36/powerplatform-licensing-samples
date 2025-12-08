@@ -55,7 +55,6 @@ class Program
                 // these should be set in the LaunchSettings.json or at runtime in Environment Variables
                 string coreEnvironment = Environment.GetEnvironmentVariable("CS_ENVIRONMENT");
                 string coreClusterCategory = Environment.GetEnvironmentVariable("CS_CATEGORY");
-                string coreClusterType = Environment.GetEnvironmentVariable("CS_TYPE");
 
                 configBuilder
                     .SetBasePath(AppContext.BaseDirectory);

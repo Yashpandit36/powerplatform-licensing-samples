@@ -4,5 +4,8 @@ public interface ICommandOptions
 {
     bool? WhatIf { get; set; }
 
-    int NumberOfAttempts { get; set; }
+    /// <summary>
+    /// Required TenantId for authentication purposes.
+    /// </summary>
+    string TenantId { get; set; }
 }

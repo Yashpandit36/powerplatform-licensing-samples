@@ -5,46 +5,18 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading;
-using Microsoft.Extensions.Options;
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using sample.gateway.Discovery;
-using sample.gateway.Tokens;
 
-public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
+public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
 {
-    private readonly GatewayConfig _gatewayConfig;
-    private readonly INeptuneDiscovery _neptuneDiscovery;
-    private string _clientId;
-    private Uri _authority;
-    private IPublicClientApplication _clientApplication;
-
-    public CommandAllocationPut(
-        CommandAllocationPutOptions opts,
+    public CommandAllocationPatch(
+        CommandAllocationPatchOptions opts,
         IConfiguration configuration,
-        IOptionsMonitor<GatewayConfig> gatewayConfig,
-        INeptuneDiscovery neptuneDiscovery,
-        ILogger logger) : base(opts, configuration, logger)
+        ILogger logger,
+        IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
     {
-        _gatewayConfig = gatewayConfig?.CurrentValue ?? throw new ArgumentNullException(nameof(gatewayConfig));
-        _neptuneDiscovery = neptuneDiscovery ?? throw new ArgumentNullException(nameof(neptuneDiscovery));
-    }
-
-    public override void OnInit()
-    {
-        _clientId = PowershellClientId.ToString();
-
-        _authority = new Uri(_gatewayConfig.AuthenticationEndpoint.GetScopeEnsureResourceTrailingSlash(Opts.TenantId));
-
-        // Will will use a Public Client to obtain tokens interactively
-        _clientApplication = PublicClientApplicationBuilder
-          .Create(_clientId)
-          .WithAuthority(_authority.ToString(), validateAuthority: true)
-          .WithDefaultRedirectUri()
-          .WithInstanceDiscovery(enableInstanceDiscovery: true)
-          .Build();
     }
 
     // Add the SupportedOSPlatform attribute to the method where TokenStorage.SaveToken is called
@@ -61,10 +33,9 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
             Uri bapEnvironmentsUrl = new Uri(bapDomain, $"/providers/Microsoft.BusinessAppPlatform/scopes/admin/environments?api-version=2021-04-01&$top={pagingBy}&$select=name,properties.displayName,properties.createdTime,properties.tenantId,location");
 
             // Neptune PPAPI GW Tenant routing URL
-            Uri gatewayTenantUri = new Uri($"https://{_neptuneDiscovery.GetTenantEndpoint(Opts.TenantId)}");
-            Uri islandGatewayTenantUri = new Uri($"https://{_neptuneDiscovery.GetTenantIslandClusterEndpoint(Opts.TenantId)}");
+            Uri gatewayTenantUri = new Uri($"https://{_neptuneDiscovery.GetGatewayEndpoint(Opts.TenantId)}");
 
-            (bool flowControl, int value) = ProcessBapEnvironments(bapDomain, bapEnvironmentsUrl.ToString(), gatewayTenantUri, islandGatewayTenantUri, correlationId);
+            (bool flowControl, int value) = ProcessBapEnvironments(bapDomain, bapEnvironmentsUrl.ToString(), gatewayTenantUri, correlationId);
             if (!flowControl)
             {
                 return value;
@@ -80,7 +51,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
 
     // Add the SupportedOSPlatform attribute to the method where TokenStorage.SaveToken is called
     [SupportedOSPlatform("windows")]
-    private (bool flowControl, int value) ProcessBapEnvironments(Uri bapBaseUri, string bapEnvironmentsUrl, Uri gatewayTenantUri, Uri islandGatewayTenantUri, Guid correlationId)
+    private (bool flowControl, int value) ProcessBapEnvironments(Uri bapBaseUri, string bapEnvironmentsUrl, Uri gatewayTenantUri, Guid correlationId)
     {
         if (!IsSafeNextLink(bapBaseUri, bapEnvironmentsUrl))
         {
@@ -91,7 +62,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
         string gatewayResource = _neptuneDiscovery.GetTokenAudience();
         string tokenPrefix = _neptuneDiscovery.ClusterCategory.ToString();
         string tokenSuffix = "gateway";
-        string gatewayAccessToken = OnAcquireUserToken(_clientApplication, _authority, _clientId, gatewayResource, tokenPrefix, tokenSuffix).GetAwaiter().GetResult();
+        string gatewayAccessToken = OnAcquireUserToken(_clientId, gatewayResource, tokenPrefix, tokenSuffix).GetAwaiter().GetResult();
         if (string.IsNullOrWhiteSpace(gatewayAccessToken))
         {
             TraceLogger.LogError("Failed to acquire token for gateway.");
@@ -99,7 +70,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
         }
 
         string bapResource = _neptuneDiscovery.GetBapAudience();
-        string bapAccessToken = OnAcquireUserToken(_clientApplication, _authority, _clientId, bapResource, tokenPrefix, "bap").GetAwaiter().GetResult();
+        string bapAccessToken = OnAcquireUserToken(_clientId, bapResource, tokenPrefix, "bap").GetAwaiter().GetResult();
         if (string.IsNullOrWhiteSpace(bapAccessToken))
         {
             TraceLogger.LogError("Failed to acquire token for BAP.");
@@ -191,7 +162,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
         {
             // Handle pagination if needed
             TraceLogger.LogInformation("More environments to process, next link: {NextLink}", environments.NextLink);
-            return ProcessBapEnvironments(bapBaseUri, environments.NextLink, gatewayTenantUri, islandGatewayTenantUri, correlationId);
+            return ProcessBapEnvironments(bapBaseUri, environments.NextLink, gatewayTenantUri, correlationId);
         }
 
         return (flowControl: true, value: default);
@@ -212,13 +183,13 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
                 },
                 EntitlementId = entitlementId,
                 EnforcementRules = new List<EnforcementRule>
-            {
-                new EnforcementRule
                 {
-                    IsEnabled = Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool,
-                    Type = enforcementRuleType
+                    new EnforcementRule
+                    {
+                        IsEnabled = Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool,
+                        Type = enforcementRuleType
+                    }
                 }
-            }
             };
             allocationPutRequestModel.AllocatedEntitlements.Add(newEntitlement);
             return true;
@@ -238,7 +209,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
                 // If the entitlement exists but doesn't have the enforcement rule, add it
                 existingEntitlement.EnforcementRules.Add(new EnforcementRule
                 {
-                    IsEnabled = Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool,
+                    IsEnabled = Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool,
                     Type = enforcementRuleType
                 });
                 return true;
@@ -249,7 +220,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
                 if (entitlementRule.IsEnabled)
                 {
                     // ensure it's set to false
-                    if (Opts.Action == CommandAllocationPutOptionsAction.DisableDrawFromTenantPool)
+                    if (Opts.Action == CommandAllocationPatchOptionsAction.DisableDrawFromTenantPool)
                     {
                         entitlementRule.IsEnabled = false;
                         return true; // Change was made
@@ -258,7 +229,7 @@ public class CommandAllocationPut : BaseCommand<CommandAllocationPutOptions>
                 else
                 {
                     // ensure it's set to true
-                    if (Opts.Action == CommandAllocationPutOptionsAction.EnableDrawFromTenantPool)
+                    if (Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool)
                     {
                         entitlementRule.IsEnabled = true;
                         return true; // Change was made

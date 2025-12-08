@@ -1,6 +1,6 @@
 ﻿namespace sample.gateway;
 
-public enum CommandAllocationPutOptionsAction
+public enum CommandAllocationPatchOptionsAction
 {
     DisableDrawFromTenantPool,
 
