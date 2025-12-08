@@ -5,11 +5,124 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "PowerShell Attach to Host Process",
-      "type": "PowerShell",
-      "request": "attach",
-      "processId": "${command.PickPSHostProcess}",
-      "runspaceId": 1
+      "name": "CommandEnvironmentBillingGet",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/sample.gateway",
+        "--launch-profile",
+        "ToolsDevelopmentPreprod",
+        "CommandEnvironmentBillingGet",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "--environmentId", "f74e8233-dcad-e509-a2ed-e257505095b3"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
+      "name": "CommandEnvironmentBillingGetWhatIf",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/sample.gateway",
+        "--launch-profile",
+        "ToolsDevelopmentPreprod",
+        "CommandEnvironmentBillingGet",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "--environmentId", "f74e8233-dcad-e509-a2ed-e257505095b3",
+        "--whatif", "true"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
+      "name": "CommandAllocationGet",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/sample.gateway",
+        "--launch-profile",
+        "ToolsDevelopmentPreprod",
+        "CommandAllocationGet",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "--environmentId", "f74e8233-dcad-e509-a2ed-e257505095b3"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
+      "name": "CommandAllocationGetDebug",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}\\out\\bin\\Debug-x64\\sample.gateway\\win-x64\\sample-gateway.dll",
+      "args": [
+        "CommandAllocationGet",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "--environmentId", "f74e8233-dcad-e509-a2ed-e257505095b3"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "CS_ENVIRONMENT": "test",
+        "CS_CATEGORY": "Preprod",
+        "CS_TYPE": "CustomerManagement"
+      }
+    },
+    {
+      "name": "CommandAllocationPatchEnableDrawWhatIf",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/sample.gateway",
+        "--launch-profile",
+        "ToolsDevelopmentPreprod",
+        "CommandAllocationPatch",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "-a", "EnableDrawFromTenantPool", 
+        "--whatif", "true"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    },
+    {
+      "name": "CommandAllocationPatchDisableDrawWhatIf",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "src/sample.gateway",
+        "--launch-profile",
+        "ToolsDevelopmentPreprod",
+        "CommandAllocationPatch",
+        "--tenantId", "03ab3068-c403-406d-8351-bdbb6374c8b0", 
+        "-a", "DisableDrawFromTenantPool", 
+        "--whatif", "true"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "internalConsole"
     },
     {
       "name": "PowerShell: Interactive Session",

@@ -32,14 +32,11 @@ For the best experience, use Visual Studio Code and GitHub Copilot. See the [get
 ### Prerequisites
 
 1. Install [VS Code](https://code.visualstudio.com/download) or [VS Code Insiders](https://code.visualstudio.com/insiders)
-
-3. Open VS Code in an empty folder
+1. Open VS Code in the root folder
 
 ### Installation
 
-#### ✨ One-Click Install
-
-After installation, run launch profiles from the Run and Debug pane (Ctrl+Shift+D) to start the MCP Server with different configurations.
+dotnet src\sample.gateway\sample.gateway.csproj restore should restore from public nuget feeds.
 
 #### 🧨 Install from Public Feed (Recommended)
 
