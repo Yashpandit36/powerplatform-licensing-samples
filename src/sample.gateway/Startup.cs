@@ -1,19 +1,18 @@
-﻿namespace sample.gateway
+﻿namespace sample.gateway;
+
+using Microsoft.AspNetCore.Builder;
+
+internal class Startup
 {
-    using Microsoft.AspNetCore.Builder;
-
-    internal class Startup
+    public Startup(ILogger<Startup> logger)
     {
-        public Startup(ILogger<Startup> logger)
-        {
-        }
+    }
 
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
-        {
-        }
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+    }
 
-        public void Configure(IApplicationBuilder app)
-        {
-        }
+    public void Configure(IApplicationBuilder app)
+    {
     }
 }

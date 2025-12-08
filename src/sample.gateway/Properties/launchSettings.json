@@ -4,95 +4,69 @@
       "commandName": "Project",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Dev",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_ENVIRONMENT": "prod",
+        "CS_CATEGORY": "Prod",
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "EvaluateRoleAssignment": {
+    "CommandEnvironmentBillingGet": {
       "commandName": "Project",
-      "commandLineArgs": "EvaluateRoleAssignment --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --userId b2804446-d441-422f-99d4-ca4d20f84d99",
+      "commandLineArgs": "CommandEnvironmentBillingGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f74e8233-dcad-e509-a2ed-e257505095b3",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "EvaluateEntitlement": {
+    "CommandEnvironmentBillingGetProd": {
       "commandName": "Project",
-      "commandLineArgs": "EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "commandLineArgs": "CommandEnvironmentBillingGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId d54a33bc-880a-e348-b341-3a0581585c02",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_ENVIRONMENT": "prod",
+        "CS_CATEGORY": "Prod",
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "EvaluateEntitlementEnv": {
+    "CommandAllocationPatchEnableDrawWhatIf": {
       "commandName": "Project",
-      "commandLineArgs": "EvaluateEntitlement --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool --whatif true",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "EvaluateEntitlementEnvWhatIf": {
+    "CommandAllocationPatchEnableDraw": {
       "commandName": "Project",
-      "commandLineArgs": "EvaluateEntitlement --whatif true --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f67cbc8b-45af-e098-b776-441459089344",
+      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "IslandCluster",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPutEnableDrawWhatIf": {
+    "CommandAllocationPatchDisableDrawWhatIf": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool --whatif true",
+      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPutDisableDrawWhatIf": {
+    "CommandAllocationPatchDisableDraw": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
+      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
-      }
-    },
-    "CommandAllocationPut": {
-      "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPut --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
-      "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CS_ENVIRONMENT": "test",
-        "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
     "CommandAllocationGet": {
@@ -100,11 +74,9 @@
       "commandLineArgs": "CommandAllocationGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f74e8233-dcad-e509-a2ed-e257505095b3",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
     "CommandAllocationGetGccM": {
@@ -112,11 +84,9 @@
       "commandLineArgs": "CommandAllocationGet --tenantId a8037933-4d29-4ef8-8754-e67b2edd480b --environmentId 2fa11e00-50c1-ec50-bc11-a8145aaff80c",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "gov",
         "CS_CATEGORY": "gov",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     },
     "CommandCapacityGet": {
@@ -124,11 +94,9 @@
       "commandLineArgs": "CommandCapacityGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
         "CS_CATEGORY": "Preprod",
-        "CS_TYPE": "CustomerManagement",
-        "CS_SubjectAlternativeName": "local.forserviceauthuseonly.pacore.client"
+        "CS_TYPE": "CustomerManagement"
       }
     }
   }

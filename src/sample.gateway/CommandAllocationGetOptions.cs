@@ -1,29 +1,18 @@
-﻿namespace sample.gateway
+﻿namespace sample.gateway;
+
+[Verb("CommandAllocationGet")]
+public class CommandAllocationGetOptions : CommandOptions
 {
-    using Microsoft.Extensions.Options;
-    using sample.gateway.Discovery;
+    [Option("environmentId", Required = false, SetName = "AllParameterSets", HelpText = "Environment Id for which token will be issued")]
+    public string EnvironmentId { get; set; }
 
-    [Verb("CommandAllocationGet")]
-    public class CommandAllocationGetOptions : CommandOptions
+    public int RunGenerateAndReturnExitCode(
+        IConfiguration configuration,
+        ILogger logger,
+        IServiceProvider serviceProvider)
     {
-        [Option("tenantId", Required = false, SetName = "AllParameterSets", HelpText = "Tenant Id for which token will be issued")]
-        public string TenantId { get; set; }
-
-        [Option("environmentId", Required = false, SetName = "AllParameterSets", HelpText = "Environment Id for which token will be issued")]
-        public string EnvironmentId { get; set; }
-
-        public int RunGenerateAndReturnExitCode(
-            IConfiguration configuration,
-            ILogger logger,
-            IServiceProvider serviceProvider)
-        {
-            var authentication = serviceProvider.GetRequiredService<IMicrosoftAuthentication>();
-            var gatewayConfig = serviceProvider.GetRequiredService<IOptionsMonitor<GatewayConfig>>();
-            var neptuneDiscovery = serviceProvider.GetRequiredService<INeptuneDiscovery>();
-
-            var cmd = new CommandAllocationGet(this, configuration, gatewayConfig, neptuneDiscovery, logger);
-            var result = cmd.Run();
-            return result;
-        }
+        CommandAllocationGet cmd = new CommandAllocationGet(this, configuration, logger, serviceProvider);
+        int result = cmd.Run();
+        return result;
     }
 }
