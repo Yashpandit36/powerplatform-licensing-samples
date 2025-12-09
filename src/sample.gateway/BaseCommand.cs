@@ -213,6 +213,7 @@ public abstract class BaseCommand<T> where T : ICommandOptions
             {
                 // We can add retry logic, transient fault handling, or logging here
                 string errorResponse = response.Content.ReadAsStringAsync(cancellationToken).Result;
+                TraceLogger.LogInformation("Error Request: {url}", url);
                 TraceLogger.LogInformation("Error Response: {ErrorResponse}", errorResponse);
             }
             else

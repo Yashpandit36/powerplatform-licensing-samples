@@ -9,10 +9,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
+public class CommandAllocationEnvironmentsPatch : BaseCommand<CommandAllocationEnvironmentsPatchOptions>
 {
-    public CommandAllocationPatch(
-        CommandAllocationPatchOptions opts,
+    public CommandAllocationEnvironmentsPatch(
+        CommandAllocationEnvironmentsPatchOptions opts,
         IConfiguration configuration,
         ILogger logger,
         IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
@@ -91,18 +91,18 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
 
             Uri allocationsUrl = new Uri(gatewayTenantUri, $"/licensing/allocations?$filter=environmentId eq '{environment.Name}' and EntitlementId in (MCSMessages,MCSSessions)&api-version=1");
             string allocationsResponse = OnSendAsync(allocationsUrl.ToString(), Opts.TenantId, gatewayAccessToken, HttpMethod.Get, correlationId: correlationId, cancellationToken: CancellationToken.None);
-            if (string.IsNullOrWhiteSpace(allocationsResponse))
-            {
-                TraceLogger.LogInformation("Failed to retrieve allocations for Environment: {EnvironmentName}.", environment.Name);
-            }
-            else
+            if (!string.IsNullOrWhiteSpace(allocationsResponse))
             {
                 // Can Put
                 AllocationResponseModel allocationResponse = JsonConvert.DeserializeObject<AllocationResponseModel>(allocationsResponse);
 
                 AllocationPutRequestModel allocationPutRequestModel = new AllocationPutRequestModel
                 {
-                    Scope = allocationResponse.Scope,
+                    Scope = new ScopeModel
+                    {
+                        TenantId = allocationResponse.Scope.TenantId,
+                        EnvironmentId = allocationResponse.Scope.EnvironmentId,
+                    },
                     AllocatedEntitlements = allocationResponse.AllocatedEntitlements ?? new List<EntitlementAllocationModel>(),
                 };
 
@@ -144,11 +144,7 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
                 else
                 {
                     string putResponse = OnSendAsync(allocationsPutUrl.ToString(), Opts.TenantId, gatewayAccessToken, httpMethod: HttpMethod.Put, requestBody: assertedChange, correlationId: correlationId, cancellationToken: CancellationToken.None);
-                    if (string.IsNullOrWhiteSpace(putResponse))
-                    {
-                        TraceLogger.LogError("Failed to PUT allocations for Environment: {EnvironmentName}", environment.Name);
-                    }
-                    else
+                    if (!string.IsNullOrWhiteSpace(putResponse))
                     {
                         TraceLogger.LogInformation("Successfully PUT allocations for Environment: {EnvironmentName}", environment.Name);
                         TraceLogger.LogInformation("Response: {PutResponse}", putResponse);
@@ -186,7 +182,7 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
                 {
                     new EnforcementRule
                     {
-                        IsEnabled = Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool,
+                        IsEnabled = Opts.Action == CommandAllocationEnvironmentsPatchOptionsAction.EnableDrawFromTenantPool,
                         Type = enforcementRuleType
                     }
                 }
@@ -209,7 +205,7 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
                 // If the entitlement exists but doesn't have the enforcement rule, add it
                 existingEntitlement.EnforcementRules.Add(new EnforcementRule
                 {
-                    IsEnabled = Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool,
+                    IsEnabled = Opts.Action == CommandAllocationEnvironmentsPatchOptionsAction.EnableDrawFromTenantPool,
                     Type = enforcementRuleType
                 });
                 return true;
@@ -220,7 +216,7 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
                 if (entitlementRule.IsEnabled)
                 {
                     // ensure it's set to false
-                    if (Opts.Action == CommandAllocationPatchOptionsAction.DisableDrawFromTenantPool)
+                    if (Opts.Action == CommandAllocationEnvironmentsPatchOptionsAction.DisableDrawFromTenantPool)
                     {
                         entitlementRule.IsEnabled = false;
                         return true; // Change was made
@@ -229,7 +225,7 @@ public class CommandAllocationPatch : BaseCommand<CommandAllocationPatchOptions>
                 else
                 {
                     // ensure it's set to true
-                    if (Opts.Action == CommandAllocationPatchOptionsAction.EnableDrawFromTenantPool)
+                    if (Opts.Action == CommandAllocationEnvironmentsPatchOptionsAction.EnableDrawFromTenantPool)
                     {
                         entitlementRule.IsEnabled = true;
                         return true; // Change was made

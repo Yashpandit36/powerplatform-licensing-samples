@@ -69,7 +69,7 @@ https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/tenant-capac
 - Parameters:
   - tenantId: (Required) The tenant id for which the operation will execute.  This is used to retreive a user token.
 
-### CommandAllocationGet
+### CommandAllocationEnvironmentGet
 
 This command will enumerate the environments for which you have access and return the licensing allocation for the specified tenant.
 
@@ -77,14 +77,28 @@ https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/currency-all
 
 - Parameters:
   - tenantId: (Required) The tenant id for which the operation will execute.  This is used to retreive a user token.
-  - environmentId: (Optional) The environment id for which the operation will execute.  If not specified, all environments will be returned.
+  - environmentId: (Required) The environment id for which the operation will execute.  If not specified, all environments will be returned.
 
-### CommandAllocationPatch
+### CommandAllocationEnvironmentPatch
+
+This command will patch the allocation currency for the specified environment for which you have access.  Please note, this is a Legacy API and is only supported for environments created before Tenant Pool licensing was introduced.
+*This will apply the changes.*
+
+https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/currency-allocation/patch-currency-allocation-by-environment
+
+- Parameters:
+  - tenantId: (Required) The tenant id for which the operation will execute.  This is used to retreive a user token.
+  - environmentId: (Required) The environment id for which the operation will execute.  If not specified, all environments will be returned.
+  - Allocated: (Required) int value to adjust the allocated amount.
+  - CurrencyType: (Required) Enum value to set the currency type (AI,PowerAutomatePerProcess,ProcessMiningDataStorage).
+  - WhatIf: (Optional) this parameter will simulate the changes without actually applying them.
+
+### CommandAllocationEnvironmentsPatch
 
 This command will enumerate the environments for which you have access and enable or disable draw from Tenant Pool licensing for each environment.
 *This will apply the changes.*
 
-https://learn.microsoft.com/en-us/rest/api/power-platform/licensing/currency-allocation/patch-currency-allocation-by-environment
+<undocumented endpoint>
 
 - Parameters:
   - tenantId: (Required) The tenant id for which the operation will execute.  This is used to retreive a user token.
