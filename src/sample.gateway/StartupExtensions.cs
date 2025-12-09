@@ -87,9 +87,11 @@ public static class StartupExtensions
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
             case CommandEnvironmentBillingGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
-            case CommandAllocationPatchOptions opts:
+            case CommandAllocationEnvironmentsPatchOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
-            case CommandAllocationGetOptions opts:
+            case CommandAllocationEnvironmentPatchOptions opts:
+                return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
+            case CommandAllocationEnvironmentGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);
             case CommandCapacityGetOptions opts:
                 return opts.RunGenerateAndReturnExitCode(config, appLogger, host.Services);

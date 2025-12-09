@@ -38,9 +38,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPatchEnableDrawWhatIf": {
+    "CommandAllocationEnvironmentsPatchEnableDrawWhatIf": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool --whatif true",
+      "commandLineArgs": "CommandAllocationEnvironmentsPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool --whatif true",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
@@ -48,9 +48,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPatchEnableDraw": {
+    "CommandAllocationEnvironmentsPatchEnableDraw": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool",
+      "commandLineArgs": "CommandAllocationEnvironmentsPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 -a EnableDrawFromTenantPool",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
@@ -58,9 +58,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPatchDisableDrawWhatIf": {
+    "CommandAllocationEnvironmentsPatchDisableDrawWhatIf": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
+      "commandLineArgs": "CommandAllocationEnvironmentsPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --whatif true",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
@@ -68,9 +68,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationPatchDisableDraw": {
+    "CommandAllocationEnvironmentsPatchDisableDraw": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
+      "commandLineArgs": "CommandAllocationEnvironmentsPatch --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
@@ -78,9 +78,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationGet": {
+    "CommandAllocationEnvironmentGet": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f74e8233-dcad-e509-a2ed-e257505095b3",
+      "commandLineArgs": "CommandAllocationEnvironmentGet --tenantId 03ab3068-c403-406d-8351-bdbb6374c8b0 --environmentId f74e8233-dcad-e509-a2ed-e257505095b3",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "test",
@@ -88,9 +88,9 @@
         "CS_TYPE": "CustomerManagement"
       }
     },
-    "CommandAllocationGetGccM": {
+    "CommandAllocationEnvironmentGetGccM": {
       "commandName": "Project",
-      "commandLineArgs": "CommandAllocationGet --tenantId a8037933-4d29-4ef8-8754-e67b2edd480b --environmentId 2fa11e00-50c1-ec50-bc11-a8145aaff80c",
+      "commandLineArgs": "CommandAllocationEnvironmentGet --tenantId a8037933-4d29-4ef8-8754-e67b2edd480b --environmentId 2fa11e00-50c1-ec50-bc11-a8145aaff80c",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
         "CS_ENVIRONMENT": "gov",

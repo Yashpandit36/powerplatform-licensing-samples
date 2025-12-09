@@ -61,12 +61,7 @@ public class CommandCapacityGet : BaseCommand<CommandCapacityGetOptions>
         Uri requestUrl = new Uri(gatewayTenantUri, $"/licensing/tenantCapacity/currencyReports?api-version=2022-03-01-preview");
         string requestResponse = OnSendAsync(requestUrl.ToString(), tenantId, gatewayAccessToken, httpMethod: HttpMethod.Get, correlationId: Guid.NewGuid(), cancellationToken: CancellationToken.None);
 
-        if (string.IsNullOrWhiteSpace(requestResponse))
-        {
-            TraceLogger.LogInformation($"Failed {requestUrl}.");
-            TraceLogger.LogInformation($"Failed to retrieve currencyReports {tenantId}.");
-        }
-        else
+        if (!string.IsNullOrWhiteSpace(requestResponse))
         {
             TraceLogger.LogInformation($"Succeeded {requestUrl}.");
             TraceLogger.LogInformation($"currencyReports for {tenantId}: {requestResponse}");

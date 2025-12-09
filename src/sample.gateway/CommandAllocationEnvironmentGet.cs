@@ -4,10 +4,10 @@ using System.Net.Http;
 using System.Runtime.Versioning;
 using System.Threading;
 
-public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
+public class CommandAllocationEnvironmentGet : BaseCommand<CommandAllocationEnvironmentGetOptions>
 {
-    public CommandAllocationGet(
-        CommandAllocationGetOptions opts,
+    public CommandAllocationEnvironmentGet(
+        CommandAllocationEnvironmentGetOptions opts,
         IConfiguration configuration,
         ILogger logger,
         IServiceProvider serviceProvider) : base(opts, configuration, logger, serviceProvider)
@@ -29,7 +29,7 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
             (bool flowControl, string value) = GetEnvironmentAllocation(gatewayTenantUri, Opts.TenantId, Opts.EnvironmentId);
             if (flowControl)
             {
-                TenantCapacityDetailsModel results = Newtonsoft.Json.JsonConvert.DeserializeObject<TenantCapacityDetailsModel>(value);
+                AllocationsByEnvironmentResponseModelV1 results = Newtonsoft.Json.JsonConvert.DeserializeObject<AllocationsByEnvironmentResponseModelV1>(value);
 
                 return 0;
             }
@@ -62,12 +62,7 @@ public class CommandAllocationGet : BaseCommand<CommandAllocationGetOptions>
         bool responseOk = false;
         Uri allocationsUrl = new Uri(gatewayTenantUri, $"/licensing/environments/{environmentId}/allocations?api-version=2022-03-01-preview");
         string gatewayResponse = OnSendAsync(allocationsUrl.ToString(), tenantId, gatewayAccessToken, httpMethod: HttpMethod.Get, correlationId: Guid.NewGuid(), cancellationToken: CancellationToken.None);
-        if (string.IsNullOrWhiteSpace(gatewayResponse))
-        {
-            TraceLogger.LogInformation($"Failed {allocationsUrl}.");
-            TraceLogger.LogInformation($"Failed to retrieve allocations {environmentId}.");
-        }
-        else
+        if (!string.IsNullOrWhiteSpace(gatewayResponse))
         {
             TraceLogger.LogInformation($"Succeeded {allocationsUrl}.");
             TraceLogger.LogInformation($"Allocations for {environmentId}: {gatewayResponse}");

@@ -52,12 +52,7 @@ public class CommandBillingPolicyEnvironmentGet : BaseCommand<CommandBillingPoli
 
         bool responseOk = false;
         string gatewayResponse = OnSendAsync(url.ToString(), tenantId, gatewayAccessToken, httpMethod: HttpMethod.Get, correlationId: Guid.NewGuid(), cancellationToken: cancellationToken);
-        if (string.IsNullOrWhiteSpace(gatewayResponse))
-        {
-            TraceLogger.LogInformation($"Failed {url}.");
-            TraceLogger.LogInformation($"Failed to retrieve environments for {Opts.TenantId}.");
-        }
-        else
+        if (!string.IsNullOrWhiteSpace(gatewayResponse))
         {
             TraceLogger.LogInformation($"Succeeded {url}.");
             TraceLogger.LogInformation($"billing environments for {Opts.TenantId}: {gatewayResponse}");
